@@ -1,25 +1,25 @@
-body {
-    background-image: url("Screenshot from 2020-04-21 09-35-46.png");
-    background-size: cover;
-}
-
-.op {
-    opacity: 0.4;
-}
-
-.msg1 {
-    position: absolute;
-    top: 10%;
-    right: 20%;
-}
-
-#msg {
-    position: absolute;
-    /* positions from previous screen */
-    top: 10%;
-    left: 70%;
-}
-
-#coordinates {
-    background-color: yellow;
-}
+    body {
+        background-image: url("fundo.jpg");
+        background-size: cover;
+    }
+    
+    .op {
+        opacity: 0.4;
+    }
+    
+    .msg1 {
+        position: absolute;
+        top: 10%;
+        right: 20%;
+    }
+    
+    #msg {
+        position: absolute;
+        /* positions from previous screen */
+        /* top: 10%;
+    left: 70%;*/
+    }
+    
+    #coordinates {
+        background-color: yellow;
+    }
