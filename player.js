@@ -1,10 +1,9 @@
+// do not move textbox (designer mode)
+moveBox = false
+
 currentSlide = 0; // current slide/line of the text file
 loaded = false; // the sequence file is not loaded yet
 lines = []
-
-// first values of x and y (centered)
-//x = $(window).width() / 2;
-//y = $(window).height() / 2;
 
 $.ajax({
     url: "sequence.txt",
@@ -21,19 +20,28 @@ function loadSlide(i) {
     image = parts[0]
     msg = parts[1]
     xy = parts[2]
+    playxy = parts[3]
+
     $('body').css("background-image", "url('/" + image + "'");
-    //if (i > 0) { // is not the first time? update coordinates
+
     coords = xy.split(",")
     x = coords[0] + "px";
     y = coords[1] + "px";
-    //}
     $("#msg").css({ left: x, top: y, position: 'absolute' }); // put the box in its place
     $("#msg").html(msg);
+    //alert(y);
+
+    coords2 = playxy.split(",");
+    px = coords2[0] + "px";
+    py = coords2[1] + "px";
+    $("#btn").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
     //alert(lines[i]);
 }
 
 $("#btn").click(function() {
     if (loaded) {
+        // do not move textbox
+        moveBox = false
         currentSlide = currentSlide + 1;
         if (!(typeof lines[currentSlide] === 'undefined')) {
             loadSlide(currentSlide);

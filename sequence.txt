@@ -1,5 +1,5 @@
-Screenshot from 2020-04-22 15-54-27.png | Bem vindo. Este é um vídeo interativo sobre a ferramenta Glade. Clique na seta para começar. | 500, 500
-Screenshot from 2020-04-22 15-54-34.png | A primeira ação para construir uma janela é inserir o componente Window. | 50, 100
-Screenshot from 2020-04-22 15-54-40.png | Após clicar na área central, a janela é inserida. O componente é do tipo GtkWindow. | 300, 200
-Screenshot from 2020-04-22 15-54-46.png | A seguir, deve-se inserir um componente de layout. Vamos usar o "fixed". | 100, 200
-Screenshot from 2020-04-22 15-55-02.png | Após clicar no interior da janela, o componente é inserido na mesma. Esse componente é do tipo GtkFixed. | 600, 100
+Screenshot from 2020-04-22 15-54-27.png | Bem vindo. Este é um vídeo interativo sobre a ferramenta Glade. Clique na seta para começar. | 400, 400| 400, 420
+Screenshot from 2020-04-22 15-54-34.png | A primeira ação para construir uma janela é inserir o componente Window. | 76, 215| 76, 230
+Screenshot from 2020-04-22 15-54-40.png | Após clicar na área central, a janela é inserida. O componente é do tipo GtkWindow. | 300, 200| 300, 220
+Screenshot from 2020-04-22 15-54-46.png | A seguir, deve-se inserir um componente de layout. Vamos usar o "fixed". | 250, 337| 250, 350
+Screenshot from 2020-04-22 15-55-02.png | Após clicar no interior da janela, o componente é inserido na mesma. Esse componente é do tipo GtkFixed. | 938, 212| 938, 242

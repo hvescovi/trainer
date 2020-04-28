@@ -8,3 +8,11 @@
     * chose some point of the screen you want to put the mouse on; OR
     * do nothing (just show the screen).
 
+file sequence.txt:
+* image name
+* message
+* coordinates of box message
+* coordinates of button(s)
+
+references:
+  * https://datatofish.com/screenshot-python/
