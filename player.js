@@ -17,8 +17,6 @@ function getImageFileName(i) {
     return parts[0]
 }
 
-
-
 function loadSlide(i) {
     parts = lines[i].split("|");
     image = parts[0]
