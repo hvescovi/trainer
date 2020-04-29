@@ -1,4 +1,3 @@
-screenshot-0.png|first screenshot!| 1,1 | 100, 100 
 screenshot-0.png|first!| 1,1 | 100, 100 
-screenshot-1.png|second observation| 1,1 | 100, 100 
-screenshot-2.png|third obs to note!| 1,1 | 100, 100 
+screenshot-1.png|nova mensagem|80, 80|200, 200
+screenshot-2.png|terceira|3, 3|300, 300

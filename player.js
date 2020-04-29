@@ -1,6 +1,3 @@
-// do not move textbox (designer mode)
-moveBox = false
-
 currentSlide = 0; // current slide/line of the text file
 loaded = false; // the sequence file is not loaded yet
 lines = []
@@ -23,6 +20,7 @@ function loadSlide(i) {
     playxy = parts[3]
 
     $('body').css("background-image", "url('/" + image + "'");
+    //$('#screenshot').attr("src", image);
 
     coords = xy.split(",")
     x = coords[0] + "px";
@@ -33,16 +31,33 @@ function loadSlide(i) {
 
     coords2 = playxy.split(",");
     px = coords2[0] + "px";
+    pxTmp = parseInt(coords2[0])
+        //pxNext = (pxTmp + 45).toString() + "px";
+        //pxMove = (pxTmp + 85).toString() + "px";
     py = coords2[1] + "px";
-    $("#btn").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
+    $("#navigator").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
+    //$("#btnPrevious").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
+    //$("#btnNext").css({ left: pxNext, top: py, position: 'absolute' }); // put the box in its place
+    //$("#btnNext").css({ left: pxNext, top: py, position: 'absolute' }); // put the box in its place
     //alert(lines[i]);
 }
 
-$("#btn").click(function() {
+$("#btnNext").click(function() {
     if (loaded) {
         // do not move textbox
         moveBox = false
         currentSlide = currentSlide + 1;
+        if (!(typeof lines[currentSlide] === 'undefined')) {
+            loadSlide(currentSlide);
+        }
+    }
+});
+
+$("#btnPrevious").click(function() {
+    if (loaded) {
+        // do not move textbox
+        moveBox = false
+        currentSlide = currentSlide - 1;
         if (!(typeof lines[currentSlide] === 'undefined')) {
             loadSlide(currentSlide);
         }
