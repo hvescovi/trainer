@@ -12,6 +12,13 @@ $.ajax({
     }
 });
 
+function getImageFileName(i) {
+    parts = lines[i].split("|");
+    return parts[0]
+}
+
+
+
 function loadSlide(i) {
     parts = lines[i].split("|");
     image = parts[0]
