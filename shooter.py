@@ -4,7 +4,7 @@
 
 import pyscreenshot as ig
 import gi
-from pynput.mouse import Listener
+# from pynput.mouse import Listener
 import logging
 
 gi.require_version('Gtk', '3.0')
@@ -27,9 +27,7 @@ class Select(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self) #, title="Selection window")
 
-        # self.set_decorated(False)
-        
-        
+        # self.set_decorated(False)        
         
         #box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         box = Gtk.Box()
@@ -69,7 +67,6 @@ class Select(Gtk.Window):
 
         self.hide() # hide the select window  
 
-
 # https://pynput.readthedocs.io/en/latest/mouse.html
 # https://nitratine.net/blog/post/how-to-get-mouse-clicks-with-python/
 
@@ -106,45 +103,60 @@ class Shooter(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Trainer: shooter")
 
-        self.set_default_size(200, 250)
+        self.set_default_size(300, 250)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         box.set_property("margin", 8) # adicionar uma borda na janela
         self.add(box) # inserir o layout na janela
         
-        self.msg = Gtk.Label("Descrição da tela: ") # criar um rótulo na janela
+        self.msg = Gtk.Label("Screenshot description: ") # criar um rótulo na janela
         box.pack_start(self.msg, True, True, 0)
         
-        self.descricao = Gtk.TextView()# caixa de entrada
-        self.descricao.set_wrap_mode(Gtk.WrapMode.CHAR) # wrap as you type
+        self.txt_description = Gtk.TextView()# caixa de entrada
+        self.txt_description.set_wrap_mode(Gtk.WrapMode.CHAR) # wrap as you type
         #self.descricao.get_buffer().set_text("enter \n your \n description")
         #self.descricao.set_width_chars(30)
         #self.descricao.set_text("enter \n your \n description")
-        box.pack_start(self.descricao, True, True, 0)
+        box.pack_start(self.txt_description, True, True, 0)
         
         self.btn_area = Gtk.Button(label="Area") # criar botão "Ok"
         self.btn_area.connect("clicked", self.area) # associar evento de clique ao botão
         box.pack_start(self.btn_area, True, True, 0)
 
-        self.button = Gtk.Button(label="Salvar") # criar botão 
+        self.button = Gtk.Button(label="Save") # criar botão 
         self.button.connect("clicked", self.salvar) # associar evento de clique ao botão
         box.pack_start(self.button, True, True, 0)
 
-        self.filename = Gtk.Entry()
-        self.filename.set_text("screenshot-")
-        box.pack_start(self.filename, True, True, 0)
+        hbox1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox1.set_property("margin", 8) 
+        box.pack_start(hbox1, True, True, 0)
 
-        self.filenumber = Gtk.Entry()
-        self.filenumber.set_text("SET")
-        box.pack_start(self.filenumber, True, True, 0)
+        self.lbl_filename = Gtk.Label("Filename: ")
+        hbox1.pack_start(self.lbl_filename, True, True, 0)
 
-        self.folder = Gtk.Entry()
-        self.folder.set_text(os.getcwd())
-        box.pack_start(self.folder, True, True, 0)
+        self.txt_filename = Gtk.Entry()
+        self.txt_filename.set_text("screenshot-")
+        hbox1.pack_start(self.txt_filename, True, True, 0)
+
+        self.txt_filenumber = Gtk.Entry()
+        self.txt_filenumber.set_text("SET")
+        hbox1.pack_start(self.txt_filenumber, True, True, 0)
 
 
-        self.message = Gtk.Label("Welcome")
-        box.pack_start(self.message, True, True, 0)
+        hbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox2.set_property("margin", 8) 
+        box.pack_start(hbox2, True, True, 0)
+
+        self.lbl_folder = Gtk.Label("Folder: ")
+        hbox2.pack_start(self.lbl_folder, True, True, 0)
+
+        self.txt_folder = Gtk.Entry()
+        self.txt_folder.set_text(os.getcwd())
+        hbox2.pack_start(self.txt_folder, True, True, 0)
+
+
+        self.lbl_message = Gtk.Label("Welcome")
+        box.pack_start(self.lbl_message, True, True, 0)
 
         # selection window
         self.w2 = Select() # instanciar janela de seleção
@@ -159,17 +171,49 @@ class Shooter(Gtk.Window):
         #    listener.join()
 
     def salvar(self, widget):
-        if self.filenumber.get_text() == "SET":
-            self.message.set_text("PLEASE SET THE file counter")
+        if self.txt_filenumber.get_text() == "SET":
+            self.lbl_message.set_text("PLEASE SET THE file counter")
         else:
-            num = self.filenumber.get_text()
-            self.filenumber.set_text(str(int(num) + 1))
-
+            num = self.txt_filenumber.get_text()
+            
             titlebarheight = 40 # 50 pixels for titlebar size
             im = ig.grab(bbox=(x, y, x+w, y+h+titlebarheight))  # X1,Y1,X2,Y2
 
-            im.save(self.folder.get_text() + "/" + self.filename.get_text() + self.filenumber.get_text() + '.png')
-            im.show()
+            # prepare the image filename
+            img_filename = self.txt_filename.get_text() + self.txt_filenumber.get_text() + '.png'
+
+            # get the description
+            buf = self.txt_description.get_buffer()
+            bi = buf.get_start_iter()
+            be = buf.get_end_iter()
+            description = buf.get_text(bi, be, True)
+
+            # prepare the newline
+            newline = "\n" + img_filename + "|" + description + "| 1,1 | 100, 100"
+
+            # prepare the sequencer filename
+            txt_filename = self.txt_folder.get_text() + "/sequencer.txt"
+            
+            # the file exists?
+            if not os.path.exists(txt_filename):
+                tag = 'w' # open for writing (create it)
+            else:
+                tag = 'a' # append the newline
+            
+            # include the newline!
+            with open(txt_filename, tag) as file:
+                file.write(newline)
+            file.close()
+            
+            # save the screenshot
+            im.save(img_filename)
+
+            # im.show()
+
+            self.txt_filenumber.set_text(str(int(num) + 1)) # increment the counter
+            self.txt_description.get_buffer().set_text("") # clear the description
+
+            self.lbl_message = "screenshot SAVED!"
 
 win = Shooter() # instanciar janela
 

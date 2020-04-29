@@ -16,3 +16,8 @@ file sequence.txt:
 
 references:
   * https://datatofish.com/screenshot-python/
+
+
+* my docker command to run the player.html properly:
+
+ docker run -p 80:80 -d -v /home/friend/01-github/trainer:/usr/share/nginx/html nginx
