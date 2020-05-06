@@ -5,7 +5,7 @@ def inicio():
     return 'Designer - backend. '+\
         '<a href="/">x</a>'
 
-# curl -d '{"img": "screenshot-1", "msg":"nova mensagem", "msgcoord":"100, 100", "navcoord":"200, 200"}' -X POST http://localhost:5000/update_line
+# curl -d '{"img": "screenshot-1", "msg":"nova mensagem", "msgcoord":"100, 100", "navcoord":"200, 200", "msgboxsize":"100, 100"}' -X POST http://localhost:5000/update_line
 @app.route("/update_line", methods=["post"])
 def listar_pessoas():
 
@@ -16,9 +16,10 @@ def listar_pessoas():
     msg = json_data['msg'] 
     msgcoord = json_data['msgcoord']
     navcoord = json_data['navcoord']
+    msgboxsize = json_data['msgboxsize']
 
     # mount the new line
-    newline = img + "|" + msg + "|" + msgcoord + "|" + navcoord + "\n"
+    newline = img + "|" + msg + "|" + msgcoord + "|" + navcoord + "|" + msgboxsize + "\n"
 
     # load text file
     f = open('sequence.txt', 'r')

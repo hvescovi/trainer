@@ -10,6 +10,7 @@ resizeMsg = false
 $("#msg").click(function() {
     moveBox = !moveBox; // toogle the moving 
     moveNav = false;
+    resizeMsg = false;
     if (!moveBox) { // if stopped the movement
         // make it real
         $("#msg").animate({ opacity: '1' });
@@ -31,18 +32,19 @@ function updateCurrentScreen() {
     msg = $("#msg").text();
     msgcoord = $("#msg").position().left + ", " + $("#msg").position().top;
     navcoord = $("#navigator").position().left + ", " + $("#navigator").position().top;
+    msgboxsize = $("#msg").width() + "," + $("#msg").height();
 
     //alert(img + " | " + msg + "|" + msgcoord + "|" + navcoord);
     // update text file
-    updateLine(img, msg, msgcoord, navcoord);
+    updateLine(img, msg, msgcoord, navcoord, msgboxsize);
 
     // update internal data
-    lines[currentSlide] = img + "|" + msg + "|" + msgcoord + "|" + navcoord;
+    lines[currentSlide] = img + "|" + msg + "|" + msgcoord + "|" + navcoord + "|" + msgboxsize;
 }
 
-function updateLine(img, msg, msgcoord, navcoord) {
+function updateLine(img, msg, msgcoord, navcoord, msgboxsize) {
 
-    var dataToSend = JSON.stringify({ img: img, msg: msg, msgcoord: msgcoord, navcoord: navcoord })
+    var dataToSend = JSON.stringify({ img: img, msg: msg, msgcoord: msgcoord, navcoord: navcoord, msgboxsize: msgboxsize })
 
     myip = $("#myip").text();
     $.ajax({
@@ -73,6 +75,7 @@ function updateLine(img, msg, msgcoord, navcoord) {
 $("#btnMoveNavigator").click(function() {
     moveNav = !moveNav; // toogle the moving 
     moveBox = false;
+    resizeMsg = false;
     if (!moveNav) { // if stopped the movement
         // make it real
         $("#navigator").animate({ opacity: '1' });
@@ -116,6 +119,8 @@ $(document).mousemove(function(e) {
         // resize!
         $("#msg").css({ height: h, width: w });
 
+        $("#coordinates").text(h + "," + w);
+
         moveResizeMsgBox();
 
     }
@@ -123,7 +128,6 @@ $(document).mousemove(function(e) {
 });
 
 function moveResizeMsgBox() {
-
     // move resize box
     wbox = $("#msg").width();
     hbox = $("#msg").height();
@@ -131,7 +135,6 @@ function moveResizeMsgBox() {
     xresize = parseInt($("#msg").position().left + wbox + 34) + "px";
     yresize = parseInt($("#msg").position().top + hbox + 34) + "px";
     $("#btnResizeMsgBox").css({ left: xresize, top: yresize, position: 'absolute' });
-
 }
 
 $("#btnResizeMsgBox").click(function() {

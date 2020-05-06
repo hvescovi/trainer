@@ -23,23 +23,23 @@ function loadSlide(i) {
     msg = parts[1]
     xy = parts[2]
     playxy = parts[3]
+    sizemsgbox = parts[4]
 
     $('body').css("background-image", "url('/" + image + "'");
     //$('#screenshot').attr("src", image);
+
+    sizesbox = sizemsgbox.split(",")
+    wbox = parseInt(sizesbox[0]) + "px";
+    hbox = parseInt(sizesbox[1]) + "px";
 
     coords = xy.split(",")
     x = coords[0] + "px";
     y = coords[1] + "px";
     $("#msg").css({ left: x, top: y, position: 'absolute' }); // put the box in its place
+    $("#msg").css({ height: hbox, width: wbox });
     $("#msg").html(msg);
 
-    wbox = $("#msg").width();
-    hbox = $("#msg").height();
-    //alert(x + " <> " + (parseInt(coords[0]) + wbox + 35));
-    xresize = (parseInt(coords[0]) + wbox + 34) + "px";
-    yresize = (parseInt(coords[1]) + hbox + 34) + "px";
-    $("#btnResizeMsgBox").css({ left: xresize, top: yresize, position: 'absolute' });
-    //alert(y);
+    moveResizeMsgBox();
 
     coords2 = playxy.split(",");
     px = coords2[0] + "px";
