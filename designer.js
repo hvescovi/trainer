@@ -1,9 +1,11 @@
 // do not move textbox yet
 moveBox = false
 moveNav = false
-    //$("#btnMsg").click(function() {
-    //$("#msg").animate({ left: '250px' });
-    //});
+resizeMsg = false
+
+//$("#btnMsg").click(function() {
+//$("#msg").animate({ left: '250px' });
+//});
 
 $("#msg").click(function() {
     moveBox = !moveBox; // toogle the moving 
@@ -11,6 +13,10 @@ $("#msg").click(function() {
     if (!moveBox) { // if stopped the movement
         // make it real
         $("#msg").animate({ opacity: '1' });
+
+
+        // move resize box
+        moveResizeMsgBox();
 
         updateCurrentScreen();
     } else {
@@ -99,4 +105,46 @@ $(document).mousemove(function(e) {
         $("#coordinates").text("x=" + x + ", y=" + y);
     }
 
+    if (resizeMsg) {
+        // get current mouse position
+        x = e.pageX;
+        y = e.pageY;
+
+        h = y - $("#msg").position().top;
+        w = x - $("#msg").position().left - 15;
+
+        // resize!
+        $("#msg").css({ height: h, width: w });
+
+        moveResizeMsgBox();
+
+    }
+
+});
+
+function moveResizeMsgBox() {
+
+    // move resize box
+    wbox = $("#msg").width();
+    hbox = $("#msg").height();
+    //alert(x + " <> " + (parseInt(coords[0]) + wbox + 35));
+    xresize = parseInt($("#msg").position().left + wbox + 34) + "px";
+    yresize = parseInt($("#msg").position().top + hbox + 34) + "px";
+    $("#btnResizeMsgBox").css({ left: xresize, top: yresize, position: 'absolute' });
+
+}
+
+$("#btnResizeMsgBox").click(function() {
+    resizeMsg = !resizeMsg; // toogle the moving 
+    moveBox = false;
+    moveNav = false;
+    if (!resizeMsg) {
+        // make it real
+        $("#btnResizeBoxMsg").animate({ opacity: '1' });
+
+        updateCurrentScreen();
+    } else {
+        // make it transparent
+        $("#btnResizeBoxMsg").animate({ opacity: '0.4' });
+    }
 });
