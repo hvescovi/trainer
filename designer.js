@@ -11,10 +11,10 @@ $("#msg").click(function() {
     moveBox = !moveBox; // toogle the moving 
     moveNav = false;
     resizeMsg = false;
+    //alert($("#msg").width() + "," + $("#msg").height());
     if (!moveBox) { // if stopped the movement
         // make it real
         $("#msg").animate({ opacity: '1' });
-
 
         // move resize box
         moveResizeMsgBox();
@@ -33,6 +33,8 @@ function updateCurrentScreen() {
     msgcoord = $("#msg").position().left + ", " + $("#msg").position().top;
     navcoord = $("#navigator").position().left + ", " + $("#navigator").position().top;
     msgboxsize = $("#msg").width() + "," + $("#msg").height();
+
+    //alert(msgboxsize);
 
     //alert(img + " | " + msg + "|" + msgcoord + "|" + navcoord);
     // update text file
@@ -88,10 +90,13 @@ $("#btnMoveNavigator").click(function() {
 });
 
 $(document).mousemove(function(e) {
+
+    // $("#coordinates").text($("#msg").width() + "," + $("#msg").height());
+
     if (moveBox) {
         // get current mouse position
-        x = e.pageX - 5;
-        y = e.pageY - 5;
+        x = e.pageX - 10;
+        y = e.pageY - 10;
         // put the textbox there
         $("#msg").css({ left: x, top: y });
         // show the coordinates

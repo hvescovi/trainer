@@ -5,6 +5,7 @@ lines = []
 $.ajax({
     url: "sequence.txt",
     dataType: "text",
+    cache: false,
     success: function(data) {
         lines = data.split("\n");
         loaded = true; // file loaded!
@@ -29,14 +30,18 @@ function loadSlide(i) {
     //$('#screenshot').attr("src", image);
 
     sizesbox = sizemsgbox.split(",")
-    wbox = parseInt(sizesbox[0]) + "px";
-    hbox = parseInt(sizesbox[1]) + "px";
+    wbox = sizesbox[0] + "px";
+    hbox = sizesbox[1] + "px";
+
+    //alert("carregando ==> " + sizesbox);
 
     coords = xy.split(",")
     x = coords[0] + "px";
     y = coords[1] + "px";
     $("#msg").css({ left: x, top: y, position: 'absolute' }); // put the box in its place
-    $("#msg").css({ height: hbox, width: wbox });
+    $("#msg").width(wbox);
+    $("#msg").height(hbox);
+    //$("#msg").css({ height: hbox, width: wbox });
     $("#msg").html(msg);
 
     moveResizeMsgBox();
