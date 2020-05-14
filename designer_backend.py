@@ -1,13 +1,16 @@
 from config_designer import *
 
+# back-end activation:
+# docker run -p 80:80 -d -v /home/friend/01-github/trainer:/usr/share/nginx/html nginx
+
 @app.route("/")
 def inicio():
     return 'Designer - backend. '+\
         '<a href="/">x</a>'
 
-# curl -d '{"img": "screenshot-1", "msg":"nova mensagem", "msgcoord":"100, 100", "navcoord":"200, 200", "msgboxsize":"100, 100"}' -X POST http://localhost:5000/update_line
+# curl -d '{"img": "screenshot-1", "msg":"this is a description", "msgcoord":"100, 100", "navcoord":"200, 200", "msgboxsize":"100, 100"}' -X POST http://localhost:5000/update_line
 @app.route("/update_line", methods=["post"])
-def listar_pessoas():
+def update_line():
 
     # get data
     json_data = request.get_json(force=True)
@@ -31,9 +34,9 @@ def listar_pessoas():
         parts = data[i].split("|")
         if parts[0] == img:
             data[i] = newline
-            break;
+            break
     
-    print(data)
+    #print(data)
 
     # remove older file
     os.remove('sequence.txt')

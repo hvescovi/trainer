@@ -1,11 +1,11 @@
 # pip3 install pyscreenshot
-#  pip3 install pynput
+# pip3 install pynput
 
 import pyscreenshot as ig
 import gi
-# from pynput.mouse import Listener
-import logging
-#import cairo # for drawing rectangle!
+#import logging
+
+import time # for timer
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -25,7 +25,7 @@ w = 500
 catching = 0 # still selecting capture rectangle?
 just_show = 0 # just showing (read-only) when select window opens?
 
-color_blink = False
+color_blink = False # blink when just showing the box
 
 class Select(Gtk.Window):
 
@@ -47,6 +47,7 @@ class Select(Gtk.Window):
         self.add(self.canvas) # add to the window
 
         # 4 commands to provide transparency
+        # TODO: set_opacity is deprecated
         self.set_opacity(0.4)
         scr = self.get_screen()
         vis = scr.get_rgba_visual()
@@ -60,10 +61,8 @@ class Select(Gtk.Window):
         global color_blink
         
         if color_blink:
-            #print("x")
             cr.set_source_rgba(3,25,35,0.7)
         else:
-            #print("y")
             cr.set_source_rgba(10,15,25,0.4)
 
         cr.rectangle(x,y,w,h)
@@ -142,9 +141,6 @@ class Shooter(Gtk.Window):
         
         self.txt_description = Gtk.TextView()# caixa de entrada
         self.txt_description.set_wrap_mode(Gtk.WrapMode.CHAR) # wrap as you type
-        #self.descricao.get_buffer().set_text("enter \n your \n description")
-        #self.descricao.set_width_chars(30)
-        #self.descricao.set_text("enter \n your \n description")
         box.pack_start(self.txt_description, True, True, 0)
         
         self.btn_area = Gtk.Button(label="Define it!") # criar botão "Ok"
@@ -158,6 +154,18 @@ class Shooter(Gtk.Window):
         self.button = Gtk.Button(label="Save") # criar botão 
         self.button.connect("clicked", self.salvar) # associar evento de clique ao botão
         box.pack_start(self.button, True, True, 0)
+
+        # optional timer
+        hbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox2.set_property("margin", 8) 
+        self.lbl_timer = Gtk.Label(label="Time to shot (seconds): ")
+        hbox2.pack_start(self.lbl_timer, True, True, 0)
+
+        self.txt_timer = Gtk.Entry()
+        self.txt_timer.set_text("0")
+        hbox2.pack_start(self.txt_timer, True, True, 0)
+
+        box.pack_start(hbox2, True, True, 0)
 
         hbox1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         hbox1.set_property("margin", 8) 
@@ -174,7 +182,6 @@ class Shooter(Gtk.Window):
         self.txt_filenumber.set_text("SET")
         hbox1.pack_start(self.txt_filenumber, True, True, 0)
 
-
         hbox2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         hbox2.set_property("margin", 8) 
         box.pack_start(hbox2, True, True, 0)
@@ -186,12 +193,11 @@ class Shooter(Gtk.Window):
         self.txt_folder.set_text(os.getcwd())
         hbox2.pack_start(self.txt_folder, True, True, 0)
 
-
         self.lbl_message = Gtk.Label(label="Welcome")
         box.pack_start(self.lbl_message, True, True, 0)
 
         # selection window
-        self.w2 = Select() # instanciar janela de seleção
+        self.w2 = Select() # instantiate select window
         self.w2.set_position(Gtk.WindowPosition.CENTER) # initial position
         self.w2.set_default_size(h,w) # default size of selection window        
 
@@ -211,9 +217,14 @@ class Shooter(Gtk.Window):
         if self.txt_filenumber.get_text() == "SET":
             self.lbl_message.set_text("PLEASE SET THE file counter")
         else:
+            # get time to sleep
+            wait = int(self.txt_timer.get_text())
+            time.sleep(wait)
+
+            # get the file sequential number
             num = self.txt_filenumber.get_text()
             
-            #print(x, y, x+w, y+h)
+            # take the screenshot!
             im = ig.grab(bbox=(x, y, x+w, y+h))  # X1,Y1,X2,Y2
 
             # prepare the image filename
@@ -225,11 +236,11 @@ class Shooter(Gtk.Window):
             be = buf.get_end_iter()
             description = buf.get_text(bi, be, True)
 
-            # prepare the newline
-            newline = "\n" + img_filename + "|" + description + "| 1,1 | 100, 100"
+            # prepare the newline (some default values)
+            newline = "\n" + img_filename + "|" + description + "| 1,1 | 100, 100 | 110, 110"
 
             # prepare the sequencer filename
-            txt_filename = self.txt_folder.get_text() + "/sequencer.txt"
+            txt_filename = self.txt_folder.get_text() + "/sequence.txt"
             
             # the file exists?
             if not os.path.exists(txt_filename):

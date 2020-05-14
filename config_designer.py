@@ -1,7 +1,7 @@
-# importações
-from flask import Flask, jsonify, request # preparar resposta HTTP no formato json
-import json # ajusta conteúdo json (ex: troca aspas simples para duplas)
+# imports
+from flask import Flask, jsonify, request
+import json 
 import os
 
-# configurações
+# configs
 app = Flask(__name__)

@@ -41,7 +41,6 @@ function loadSlide(i) {
     $("#msg").css({ left: x, top: y, position: 'absolute' }); // put the box in its place
     $("#msg").width(wbox);
     $("#msg").height(hbox);
-    //$("#msg").css({ height: hbox, width: wbox });
     $("#msg").html(msg);
 
     moveResizeMsgBox();
@@ -49,17 +48,8 @@ function loadSlide(i) {
     coords2 = playxy.split(",");
     px = coords2[0] + "px";
     pxTmp = parseInt(coords2[0])
-        //pxNext = (pxTmp + 45).toString() + "px";
-        //pxMove = (pxTmp + 85).toString() + "px";
     py = coords2[1] + "px";
     $("#navigator").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
-    //$("#btnPrevious").css({ left: px, top: py, position: 'absolute' }); // put the box in its place
-    //$("#btnNext").css({ left: pxNext, top: py, position: 'absolute' }); // put the box in its place
-    //$("#btnNext").css({ left: pxNext, top: py, position: 'absolute' }); // put the box in its place
-    //alert(lines[i]);
-
-    //alert(currentSlide);
-    //alert(currentSlide + '/' + lines.length);
     $("#currentSlide").text((currentSlide + 1) + '/' + (lines.length));
 }
 
@@ -67,7 +57,6 @@ $("#btnNext").click(function() {
     if (loaded) {
         // do not move textbox
         moveBox = false
-            //alert(currentSlide + "/" + lines.length);
         if ((currentSlide + 1) < lines.length) {
             currentSlide = currentSlide + 1;
             if (!(typeof lines[currentSlide] === 'undefined')) {
