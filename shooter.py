@@ -1,14 +1,14 @@
 # pip3 install pyscreenshot
 #  pip3 install pynput
-# pip3 install wxpython
 
 import pyscreenshot as ig
 import gi
 # from pynput.mouse import Listener
 import logging
+#import cairo # for drawing rectangle!
 
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 import os
 
@@ -17,86 +17,113 @@ import os
 #from gi.repository import Gdk
 
 # default positions and height/width
-x = 0
-y = 0
+x = 10
+y = 10
 h = 400
 w = 500
+
+catching = 0 # still selecting capture rectangle?
+just_show = 0 # just showing (read-only) when select window opens?
+
+color_blink = False
 
 class Select(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self) #, title="Selection window")
+      
+        self.canvas = Gtk.DrawingArea()
+        self.canvas.connect("button-press-event", self.on_button_press)
+        self.canvas.connect("motion-notify-event", self.on_mouse_move)
+        self.canvas.set_events(self.canvas.get_events() |
+                               Gdk.EventMask.BUTTON_MOTION_MASK |
+                               #Gdk.EventMask.BUTTON1_MOTION_MASK |
+                               #Gdk.EventMask.BUTTON2_MOTION_MASK |
+                               #Gdk.EventMask.BUTTON3_MOTION_MASK |
+                               Gdk.EventMask.BUTTON_PRESS_MASK | 
+                               Gdk.EventMask.POINTER_MOTION_MASK)
 
-        # self.set_decorated(False)        
-        
-        #box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        box = Gtk.Box()
-        box.set_property("margin", 30) # border
-        self.add(box) 
-        
-        #self.msg = Gtk.Label("Select the area to screenshot")
-        #box.pack_start(self.msg, True, True, 0)
-
-        self.btn_select = Gtk.Button(label="Ok")
-        self.btn_select.connect("clicked", self.select_action)
-        box.pack_start(self.btn_select, True, True, 0)
+        self.canvas.connect('draw', self.draw_cb) # draw 'event'
+        self.add(self.canvas) # add to the window
 
         # 4 commands to provide transparency
         self.set_opacity(0.4)
         scr = self.get_screen()
         vis = scr.get_rgba_visual()
         self.set_visual(vis)
-        
-    def select_action(self, widget):
-        #Listener.stop
 
-        # get size
-        global w
-        w = self.get_size()[0]
-        global h
-        h = self.get_size()[1]
-
-# https://developer.gnome.org/pygtk/stable/class-gtkwindow.html#method-gtkwindow--get-position
-
-        # get coordinates
+    def draw_cb(self, widget, cr):
         global x
-        x = self.get_position()[0]
         global y
-        y = self.get_position()[1]
-        #print(x, y)
+        global w
+        global h
+        global color_blink
+        
+        if color_blink:
+            #print("x")
+            cr.set_source_rgba(3,25,35,0.7)
+        else:
+            #print("y")
+            cr.set_source_rgba(10,15,25,0.4)
 
-        self.hide() # hide the select window  
+        cr.rectangle(x,y,w,h)
+        cr.fill()
+        return False
 
-# https://pynput.readthedocs.io/en/latest/mouse.html
-# https://nitratine.net/blog/post/how-to-get-mouse-clicks-with-python/
+    def on_mouse_move(self, widget, event):
+        #print(event.x, event.y)
+        global catching
+        global x
+        global y
+        global w
+        global h
+        global just_show
+        global color_blink
 
-# logging.basicConfig(filename="mouse_log.txt", level=logging.DEBUG, format='%(asctime)s: %(message)s')
+        if just_show == 0: # editing mode?
+            # defining height and width?
+            if catching == 1:
+                w = abs(event.x - x)
+                h = abs(event.y - y)
+                # draw while sizing
+                self.canvas.queue_draw() 
+        else:
+            # only repaint the rectangle blinking
+            color_blink = not color_blink
+            self.canvas.queue_draw() 
 
-'''
-def on_move(x, y):
-    logging.info("Mouse moved to ({0}, {1})".format(x, y))
-    print("Mouse moved to ({0}, {1})".format(x, y))
 
-def on_click(x, y, button, pressed):
-    if pressed:
-        logging.info('Mouse clicked at ({0}, {1}) with {2}'.format(x, y, button))
+    def on_button_press(self, widget, event):
+        global catching
+        global x
+        global y
+        global w
+        global h
+        global just_show
+        global color_blink
 
-        button1 = Gtk.Button(label="Hello, world!")
-        button1.set_margin_bottom(50)
-        button1.set_margin_top(50)
+        if just_show == 1:
+            self.hide() # close it!
 
-        box = Gtk.Box(spacing=50)
-        box.pack_start(button1, True, True, 50)
+        else: # just_show == 0, I hope
 
-        window = Gtk.Window(title="Selection box", name="toplevel")
-        screen = window.get_screen()
-        visual = screen.get_rgba_visual()
-        window.set_visual(visual)
-        window.add(box)
-        window.show_all()
-        window.connect("destroy", Gtk.main_quit)
+            if catching == 0: # defining initial x and y?
+                color_blink = False
+                x = event.x
+                y = event.y
+                #print(x, y)
 
-'''
+            if catching == 1: # defining height and width?
+                w = abs(event.x - x)
+                h = abs(event.y - y)
+                #print(w, h)
+
+            catching += 1 # next step
+
+            if catching == 2: # rectangle defined?
+                self.canvas.queue_draw() # update the rectangle selected
+                self.hide() # stop selection
+                catching = 0 # next time, restart selecting
 
 class Shooter(Gtk.Window):
 
@@ -109,7 +136,8 @@ class Shooter(Gtk.Window):
         box.set_property("margin", 8) # adicionar uma borda na janela
         self.add(box) # inserir o layout na janela
         
-        self.msg = Gtk.Label("Screenshot description: ") # criar um rótulo na janela
+        self.msg = Gtk.Label() # criar um rótulo na janela
+        self.msg.set_text("Screenshot description: ")
         box.pack_start(self.msg, True, True, 0)
         
         self.txt_description = Gtk.TextView()# caixa de entrada
@@ -119,9 +147,13 @@ class Shooter(Gtk.Window):
         #self.descricao.set_text("enter \n your \n description")
         box.pack_start(self.txt_description, True, True, 0)
         
-        self.btn_area = Gtk.Button(label="Area") # criar botão "Ok"
+        self.btn_area = Gtk.Button(label="Define it!") # criar botão "Ok"
         self.btn_area.connect("clicked", self.area) # associar evento de clique ao botão
         box.pack_start(self.btn_area, True, True, 0)
+
+        self.btn_show_area = Gtk.Button(label="Just show") 
+        self.btn_show_area.connect("clicked", self.show_area) 
+        box.pack_start(self.btn_show_area, True, True, 0)
 
         self.button = Gtk.Button(label="Save") # criar botão 
         self.button.connect("clicked", self.salvar) # associar evento de clique ao botão
@@ -131,7 +163,7 @@ class Shooter(Gtk.Window):
         hbox1.set_property("margin", 8) 
         box.pack_start(hbox1, True, True, 0)
 
-        self.lbl_filename = Gtk.Label("Filename: ")
+        self.lbl_filename = Gtk.Label(label="Filename: ")
         hbox1.pack_start(self.lbl_filename, True, True, 0)
 
         self.txt_filename = Gtk.Entry()
@@ -147,7 +179,7 @@ class Shooter(Gtk.Window):
         hbox2.set_property("margin", 8) 
         box.pack_start(hbox2, True, True, 0)
 
-        self.lbl_folder = Gtk.Label("Folder: ")
+        self.lbl_folder = Gtk.Label(label="Folder: ")
         hbox2.pack_start(self.lbl_folder, True, True, 0)
 
         self.txt_folder = Gtk.Entry()
@@ -155,7 +187,7 @@ class Shooter(Gtk.Window):
         hbox2.pack_start(self.txt_folder, True, True, 0)
 
 
-        self.lbl_message = Gtk.Label("Welcome")
+        self.lbl_message = Gtk.Label(label="Welcome")
         box.pack_start(self.lbl_message, True, True, 0)
 
         # selection window
@@ -164,11 +196,16 @@ class Shooter(Gtk.Window):
         self.w2.set_default_size(h,w) # default size of selection window        
 
     def area(self, widget):
-
+        global just_show
+        just_show = 0 # edition mode
         self.w2.show_all() # show select window
+        self.w2.fullscreen() # expand to all screen
 
-        #with Listener(on_move=on_move, on_click=on_click) as listener:
-        #    listener.join()
+    def show_area(self, widget):
+        global just_show
+        just_show = 1 # read-only!
+        self.w2.show_all() # show select window
+        self.w2.fullscreen() # expand to all screen
 
     def salvar(self, widget):
         if self.txt_filenumber.get_text() == "SET":
@@ -176,8 +213,8 @@ class Shooter(Gtk.Window):
         else:
             num = self.txt_filenumber.get_text()
             
-            titlebarheight = 40 # 50 pixels for titlebar size
-            im = ig.grab(bbox=(x, y, x+w, y+h+titlebarheight))  # X1,Y1,X2,Y2
+            #print(x, y, x+w, y+h)
+            im = ig.grab(bbox=(x, y, x+w, y+h))  # X1,Y1,X2,Y2
 
             # prepare the image filename
             img_filename = self.txt_filename.get_text() + self.txt_filenumber.get_text() + '.png'
@@ -208,16 +245,14 @@ class Shooter(Gtk.Window):
             # save the screenshot
             im.save(img_filename)
 
-            # im.show()
+            im.show()
 
             self.txt_filenumber.set_text(str(int(num) + 1)) # increment the counter
             self.txt_description.get_buffer().set_text("") # clear the description
 
             self.lbl_message = "screenshot SAVED!"
 
-win = Shooter() # instanciar janela
-
-win.connect("destroy", Gtk.main_quit) # encerrar o programa ao fechar a janela
-# win.set_position(Gtk.WindowPosition.CENTER) # centralizar janela
-win.show_all() # exibir janela
-Gtk.main() # início do gtk (loop contínuo)
+win = Shooter() # create window
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main() # start!
