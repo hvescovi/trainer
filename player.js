@@ -19,6 +19,16 @@ function getImageFileName(i) {
 }
 
 function loadSlide(i) {
+
+    // playing or editing?
+    if  ($("#myip").text() != "localhost") {
+
+        // hide designer components
+        $("#btnResizeMsgBox").hide();
+        $("#btnMoveNavigator").hide();
+    }
+
+
     parts = lines[i].split("|");
     image = parts[0]
     msg = parts[1]
@@ -26,7 +36,7 @@ function loadSlide(i) {
     playxy = parts[3]
     sizemsgbox = parts[4]
 
-    $('body').css("background-image", "url('/" + image + "'");
+    $('body').css("background-image", "url('" + image + "'");
     //$('#screenshot').attr("src", image);
 
     sizesbox = sizemsgbox.split(",")

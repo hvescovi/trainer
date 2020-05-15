@@ -2,22 +2,18 @@
 
 ## Getting started
 
-* take screenshot of each screen you want to show or explain
-* for each screenshot:
-    * write notes about some point on the screenshot you want to explain; OR
-    * chose some point of the screen you want to put the mouse on; OR
-    * do nothing (just show the screen).
+* Take screenshot of each screen you want to show or explain, with notes about something on the screen
+  * run shooter.py
+* Adjust each screen positioning the box message and resizing it
+  * run designer_backend.py
+  * open index.html on a web server. I ran docker in that way: docker run -p 80:80 -d -v /home/friend/01-github/trainer:/usr/share/nginx/html nginx
 
-file sequence.txt:
+Each line of the file sequence.txt (separated by "|") contains:
 * image name
 * message
-* coordinates of box message
-* coordinates of button(s)
+* coordinates (x and y) of box message
+* coordinates (x and y) of the navigation bar (previous and next)
+* size of the box message (height and width)
 
-references:
-  * https://datatofish.com/screenshot-python/
-
-
-* my docker command to run the player.html properly:
-
- docker run -p 80:80 -d -v /home/friend/01-github/trainer:/usr/share/nginx/html nginx
+References:
+  * https://datatofish.com/screenshot-python

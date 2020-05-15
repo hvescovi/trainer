@@ -8,21 +8,27 @@ resizeMsg = false
 //});
 
 $("#msg").click(function() {
-    moveBox = !moveBox; // toogle the moving 
-    moveNav = false;
-    resizeMsg = false;
-    //alert($("#msg").width() + "," + $("#msg").height());
-    if (!moveBox) { // if stopped the movement
-        // make it real
-        $("#msg").animate({ opacity: '1' });
 
-        // move resize box
-        moveResizeMsgBox();
+    // playing or editing?
+    if  ($("#myip").text() == "localhost") {
 
-        updateCurrentScreen();
-    } else {
-        // make it transparent
-        $("#msg").animate({ opacity: '0.4' });
+        moveBox = !moveBox; // toogle the moving 
+        moveNav = false;
+        resizeMsg = false;
+        //alert($("#msg").width() + "," + $("#msg").height());
+        if (!moveBox) { // if stopped the movement
+            // make it real
+            $("#msg").animate({ opacity: '1' });
+
+            // move resize box
+            moveResizeMsgBox();
+
+            updateCurrentScreen();
+        } else {
+            // make it transparent
+            $("#msg").animate({ opacity: '0.4' });
+        }
+
     }
 });
 
