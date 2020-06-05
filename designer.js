@@ -1,3 +1,5 @@
+$(function() {
+
 // do not move textbox yet
 moveBox = false
 moveNav = false
@@ -28,9 +30,14 @@ $("#msg").click(function() {
             // make it transparent
             $("#msg").animate({ opacity: '0.4' });
         }
-
     }
 });
+
+
+function getImageFileName(i) {
+    parts = lines[i].split("|");
+    return parts[0]
+}
 
 function updateCurrentScreen() {
     // get data
@@ -111,7 +118,8 @@ $(document).mousemove(function(e) {
 
     if (moveNav) {
         // get current mouse position
-        x = e.pageX - 120;
+        //x = e.pageX - 120;
+        x = e.pageX - 170;
         y = e.pageY - 25;
         // put the textbox there
         $("#navigator").css({ left: x, top: y });
@@ -124,11 +132,16 @@ $(document).mousemove(function(e) {
         x = e.pageX;
         y = e.pageY;
 
-        h = y - $("#msg").position().top;
+        //h = y - $("#msg").position().top;
         w = x - $("#msg").position().left - 15;
 
         // resize!
-        $("#msg").css({ height: h, width: w });
+        //$("#msg").css({ height: h, width: w });
+        $("#msg").css({ width: w });
+
+        // get height, which is automatic
+        h = $("#msg").height();
+        //alert(h);
 
         $("#coordinates").text(h + "," + w);
 
@@ -161,4 +174,6 @@ $("#btnResizeMsgBox").click(function() {
         // make it transparent
         $("#btnResizeBoxMsg").animate({ opacity: '0.4' });
     }
+});
+
 });

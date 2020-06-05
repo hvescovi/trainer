@@ -1,21 +1,18 @@
-eclipse-0.png|Faça o download do eclipse.|917, 123|898, 192|128,40
-eclipse-1.png|Neste exemplo será baixada a versão 64bits.|330, 639|355, 589|182,48
-eclipse-2.png|Prossiga no download.|509, 258|703, 262|171,25
-eclipse-3.png|No linux, basta descompactar o arquivo baixado.|330, 189|349, 291|119,65
-eclipse-4.png|Existe um programa instalador para ser executado.|489, 171|484, 311|70,109
-eclipse-5.png|O instalador pode ser acionado a partir de um terminal.|721, 491|572, 514|158,68
-eclipse-6.png|Na janela do instalador, a primeira opção é a mais simples  pode ser escolhida.|416, 202|529, 275|306,44
-eclipse-7.png|Existe uma pasta de instalação padrão sugerida. Apesar de não ser visualizado corretamente nesta tela, devido a cores, a pasta da JVM identificada é /usr/lib/jvm/java-11-openjdk-amd64 |190, 275|380, 225|454,68
-eclipse-8.png|Deve-se aceitar o termo de usuário.|549, 595|575, 542|135,47
-eclipse-9.png|No término, pode-se executar o eclipse.|573, 528|554, 600|149,42
-eclipse-10.png|Na primeira execução, pede-se a pasta para ser usada como espaço de trabalho (workspace).|96, 178|467, 191|347,42
-eclipse-11.png|Vamos criar um primeiro projeto em java.|622, 114|669, 186|184,44
-eclipse-13.png|Faremos apenas um projeto básico para teste, chamado hello.|252, 116|100, 197|249,42
-eclipse-14.png|Na sequência, clique no botão Finish.|596, 756|488, 769|152,42
-eclipse-15.png|Não é preciso criar um módulo neste momento.|163, 196|214, 272|182,45
-eclipse-17.png|Para visualizar o projeto, clique no pequeno ícone abaixo do menu File.|46, 88|117, 167|258,44
-eclipse-18.png|Navegue até a pasta src, clique com o botão direito, e solicite a criação de uma classe.|643, 122|623, 247|167,95
-eclipse-19.png|A nova classe pode se chama Hello|421, 305|584, 315|139,38
-eclipse-20.png|Faça o código para imprimir uma mensagem.|409, 361|435, 461|123,68
-eclipse-21.png|Clique na seta verde para executar o programa.|235, 92|252, 166|187,43
-eclipse-22.png|O programa foi executado com sucesso!|140, 593|453, 594|294,22
+ecl_plug_wb0.png|Vamos instalar no Eclipse o plugin de construção de janelas desktop chamado WindowBuilder.|304, 295|376, 477|352,144
+ecl_plug_wb1.png|Acione o menu de instalação de novo software|401, 466|425, 394|182,108
+ecl_plug_wb2.png|Forneça o endereço de download do plugin windowbuilder: https://download.eclipse.org/windowbuilder/latest/|342, 196|555, 346|552,108
+ecl_plug_wb3.png|Após pressionar enter, selecione o conjunto WindowBuilder, e clique em Next|551, 687|711, 617|447,72
+ecl_plug_wb4.png|Clique em next para avançar!|690, 686|720, 614|172,72
+ecl_plug_wb5.png|Marque o aceite dos termos e clique em Finish para concluir a instalação.|279, 553|336, 480|283,108
+ecl_plug_wb6.png|A instalação avança|404, 612|387, 537|106,108
+ecl_plug_wb7.png|Após a instalação, reinicie o Eclipse.|290, 415|318, 529|199,72
+ecl_plug_wb8.png|Reinicie a perspectiva de exibição do Eclipse.|269, 317|243, 426|243,72
+ecl_plug_wb9.png|Clique em um ícone do canto superior esquerdo para restaurar a exibição dos projetos.|68, 123|44, 236|511,72
+ecl_plug_wb10.png|Vamos criar um novo projeto java|648, 120|620, 229|187,72
+ecl_plug_wb11.png|Crie o projeto janelaBasica e pressione Finish|293, 127|614, 137|293,72
+ecl_plug_wb12.png|Não é preciso criar um módulo. Clique em Dont Create|309, 646|340, 575|205,108
+ecl_plug_wb13.png|No item src do projeto, clique com o botão direito e acesse: new > Other|654, 554|675, 483|283,108
+ecl_plug_wb14.png|Selecione o JPanel do WindowBuilder.|326, 359|437, 288|211,72
+ecl_plug_wb15.png|Defina o nome da janela (classe): PrimeiraJanela, e clique em Finish.|400, 130|692, 643|196,144
+ecl_plug_wb16.png|Clique na guia Design para acessar o construtor visual de janela.|438, 447|507, 376|277,108
+ecl_plug_wb17.png|Agora componentes podem ser arrastados para a área de construção da janela.|548, 533|525, 684|304,108

@@ -1,3 +1,5 @@
+$(function() {
+
 currentSlide = 0; // current slide/line of the text file
 loaded = false; // the sequence file is not loaded yet
 lines = []
@@ -13,11 +15,6 @@ $.ajax({
     }
 });
 
-function getImageFileName(i) {
-    parts = lines[i].split("|");
-    return parts[0]
-}
-
 function loadSlide(i) {
 
     // playing or editing?
@@ -26,6 +23,9 @@ function loadSlide(i) {
         // hide designer components
         $("#btnResizeMsgBox").hide();
         $("#btnMoveNavigator").hide();
+      //  alert("playing!");
+    } else {
+       // alert("editiing");
     }
 
 
@@ -50,11 +50,19 @@ function loadSlide(i) {
     y = coords[1] + "px";
     $("#msg").css({ left: x, top: y, position: 'absolute' }); // put the box in its place
     $("#msg").width(wbox);
-    $("#msg").height(hbox);
+    //alert("ok");
+    //$("#msg").height(hbox);
     $("#msg").html(msg);
 
-    moveResizeMsgBox();
+    //moveResizeMsgBox();
 
+    wbox = $("#msg").width();
+    hbox = $("#msg").height();
+    //alert(x + " <> " + (parseInt(coords[0]) + wbox + 35));
+    xresize = parseInt($("#msg").position().left + wbox + 34) + "px";
+    yresize = parseInt($("#msg").position().top + hbox + 34) + "px";
+    $("#btnResizeMsgBox").css({ left: xresize, top: yresize, position: 'absolute' });
+    
     coords2 = playxy.split(",");
     px = coords2[0] + "px";
     pxTmp = parseInt(coords2[0])
@@ -87,4 +95,6 @@ $("#btnPrevious").click(function() {
             }
         }
     }
+});
+
 });
